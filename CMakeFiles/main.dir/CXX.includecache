@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yathavan/Documents/security_system/SecurityCamera.h
+opencv4/opencv2/core.hpp
+-
+opencv4/opencv2/opencv.hpp
+-
+opencv4/opencv2/video.hpp
+-
+
+/home/yathavan/Documents/security_system/main.cpp
+iostream
+-
+ctime
+-
+cstring
+-
+opencv4/opencv2/core.hpp
+-
+opencv4/opencv2/opencv.hpp
+-
+opencv4/opencv2/video.hpp
+-
+SecurityCamera.h
+/home/yathavan/Documents/security_system/SecurityCamera.h
+
