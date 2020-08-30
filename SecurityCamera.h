@@ -1,14 +1,17 @@
-#ifndef SYSTEM_SECURITYCAMERA_H
-#define SYSTEM_SECURITYCAMERA_H
+#ifndef YPARAM_SECURITYCAMERA_H
+#define YPARAM_SECURITYCAMERA_H
+
+#include <iostream>
+#include <chrono>
+#include <ctime>
+#include <string>
 
 #include <opencv4/opencv2/opencv.hpp>
 #include <opencv4/opencv2/core.hpp>
 #include <opencv4/opencv2/video.hpp>
+#include <opencv4/opencv2/imgproc.hpp>
 
-#include <ctime>
-#include <string>
-
-namespace system
+namespace yparam
 {
     const int FPS{60};
 
@@ -16,27 +19,25 @@ namespace system
     {
     private:
         cv::VideoCapture capture_stream;
+        cv::VideoWriter video_file;
         cv::Mat frame;
 
         std::string file_name{""};
 
-        int width{0};
-        int height{0};
+        int capture_width{0};
+        int capture_height{0};
 
-        int duration{0};
+        int duration_minutes{0};
 
-        void set_name(); // set the file name for the video file
-        void set_base(); // create a "base" line image from the video (something to compare other frames to for motion capture)
-        bool run_motion_detection(); // compare the frame with the base line to detect any changes 
-        bool run_facial_detection(); // run facial detection on the frames with motion detected
+        void setname();
 
     public:
         SecurityCamera();
-        SecurityCamera(int, int = 60);
+        SecurityCamera(int, int = 60); // capture stream, duration
         ~SecurityCamera();
 
         void run();
     };
-} // namespace system
+} // namespace yparam
 
-#endif // SYSTEM_SECURITYCAMERA_H
+#endif // YPARAM_SECURITYCAMERA_H

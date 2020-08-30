@@ -10,50 +10,18 @@
 
 #include "SecurityCamera.h"
 
-int main()
+int main(int argc, char **argv)
 {
-    // opening new video capture device
-    cv::VideoCapture capture(0);
-
-    // video file
-    cv::VideoWriter video;
-
-    // if no errors in capture device
-    if (capture.isOpened())
+    if (argc == 2)
     {
-        // get todays date
-        time_t now = time(0);
-        time_t end_time = now();
+        yparam::SecurityCamera securitycamera(0, std::atoi(argv[1]));
+        securitycamera.run();
 
-        // writes video to file labeled with current date at 60fps
-        video.open(
-            std::strcat(ctime(&now), ".mp4"),
-            cv::VideoWriter::fourcc('M', 'P', '4', 'V'),
-            60,
-            cv::Size(capture.get(cv::CAP_PROP_FRAME_WIDTH), capture.get(cv::CAP_PROP_FRAME_HEIGHT)));
-
-        // infinite loop
-        for (int index = 0; index < 360; index++)
-        {
-            cv::Mat frame;
-
-            // each frame of the video is stored here
-            capture >> frame;
-
-            video.write(frame);
-        }
-
-        // cv::imwrite("output.jpg", frame);
+        return 0;
     }
     else
     {
-        std::cout << "Unable to open video stream..." << std::endl;
+        std::cout << "Usage: ./main <duration_of_monitoring>" << std::endl;
         return -1;
     }
-
-    // gracefully closing the capture device
-    capture.release();
-    video.release();
-
-    return 0;
 }
