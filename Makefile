@@ -142,6 +142,33 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+MotionDetection.o: MotionDetection.cpp.o
+
+.PHONY : MotionDetection.o
+
+# target to build an object file
+MotionDetection.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MotionDetection.cpp.o
+.PHONY : MotionDetection.cpp.o
+
+MotionDetection.i: MotionDetection.cpp.i
+
+.PHONY : MotionDetection.i
+
+# target to preprocess a source file
+MotionDetection.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MotionDetection.cpp.i
+.PHONY : MotionDetection.cpp.i
+
+MotionDetection.s: MotionDetection.cpp.s
+
+.PHONY : MotionDetection.s
+
+# target to generate assembly for a file
+MotionDetection.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MotionDetection.cpp.s
+.PHONY : MotionDetection.cpp.s
+
 SecurityCamera.o: SecurityCamera.cpp.o
 
 .PHONY : SecurityCamera.o
@@ -205,6 +232,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... main"
+	@echo "... MotionDetection.o"
+	@echo "... MotionDetection.i"
+	@echo "... MotionDetection.s"
 	@echo "... SecurityCamera.o"
 	@echo "... SecurityCamera.i"
 	@echo "... SecurityCamera.s"

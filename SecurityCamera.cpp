@@ -64,11 +64,19 @@ namespace yparam
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> diff = std::chrono::steady_clock::now() - now;
 
+        this->capture_stream >> this->motionDetector; // set the base frame
+
         // this loop runs until duration elapses
         // just because it runs for 60 seconds doesn't mean that 60 frames will be assigned to the video...
         for (int index = 0; index < (this->duration_minutes * 60 * 60); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
         {
             this->capture_stream >> this->frame; // perform operations on this frame
+
+            if (motionDetector.checkDetection(this->frame)) // if motion detected
+            {
+                motionDetector.printDetection(this->frame); // print a rectangle specifying the object of motion
+            }
+
             this->video_file.write(this->frame);
 
             // keep time watch at end
@@ -78,10 +86,13 @@ namespace yparam
 
         /*
 
-        TIMES:
+        TIMES (resolved):
 
         3 MIN = 2:15
         1 MIN = 0:45
+
+
+        CONSIDER SAVING AS M3U8 SO IT CAN BE LIVESTREAMED
 
         */
     }

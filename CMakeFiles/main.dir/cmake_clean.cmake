@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/main.dir/MotionDetection.cpp.o"
   "CMakeFiles/main.dir/SecurityCamera.cpp.o"
   "CMakeFiles/main.dir/main.cpp.o"
   "main"

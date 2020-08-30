@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/yathavan/Documents/security_system/MotionDetection.cpp" "/home/yathavan/Documents/security_system/CMakeFiles/main.dir/MotionDetection.cpp.o"
   "/home/yathavan/Documents/security_system/SecurityCamera.cpp" "/home/yathavan/Documents/security_system/CMakeFiles/main.dir/SecurityCamera.cpp.o"
   "/home/yathavan/Documents/security_system/main.cpp" "/home/yathavan/Documents/security_system/CMakeFiles/main.dir/main.cpp.o"
   )

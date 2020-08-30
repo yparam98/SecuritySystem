@@ -11,6 +11,8 @@
 #include <opencv4/opencv2/video.hpp>
 #include <opencv4/opencv2/imgproc.hpp>
 
+#include "MotionDetection.h"
+
 namespace yparam
 {
     const int FPS{60};
@@ -21,6 +23,8 @@ namespace yparam
         cv::VideoCapture capture_stream;
         cv::VideoWriter video_file;
         cv::Mat frame;
+
+        MotionDetection motionDetector;
 
         std::string file_name{""};
 
