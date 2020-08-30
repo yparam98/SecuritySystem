@@ -68,20 +68,24 @@ namespace yparam
 
         // this loop runs until duration elapses
         // just because it runs for 60 seconds doesn't mean that 60 frames will be assigned to the video...
-        for (int index = 0; index < (this->duration_minutes * 60 * 60); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
+        for (int index = 0; index < (this->duration_minutes * FPS * 60); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
         {
             this->capture_stream >> this->frame; // perform operations on this frame
-
-            if (motionDetector.checkDetection(this->frame)) // if motion detected
+            
+            if (motionDetector.checkDetection(this->frame))
             {
-                motionDetector.printDetection(this->frame); // print a rectangle specifying the object of motion
+                motionDetector.printDetection(this->frame);
             }
 
-            this->video_file.write(this->frame);
-
-            // keep time watch at end
+            // reset base every 30 seconds
             diff = std::chrono::steady_clock::now() - now;
-            std::cout << diff.count() << std::endl;
+            if (diff.count() > 1)
+            {
+                this->capture_stream >> this->motionDetector; // set the base frame
+                now = std::chrono::steady_clock::now();
+            }            
+
+            this->video_file.write(this->frame);            
         }
 
         /*

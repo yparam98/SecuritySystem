@@ -10,6 +10,7 @@
 #include <opencv4/opencv2/core.hpp>
 #include <opencv4/opencv2/video.hpp>
 #include <opencv4/opencv2/imgproc.hpp>
+#include <opencv4/opencv2/highgui.hpp>
 
 namespace yparam
 {
@@ -23,6 +24,7 @@ namespace yparam
         cv::Mat baseFrame;
         std::string catchType{""};
         bool faceDetected{false};        
+        cv::Point2f points[4];
 
     public:
         MotionDetection();

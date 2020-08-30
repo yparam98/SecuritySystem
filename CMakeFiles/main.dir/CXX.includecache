@@ -9,6 +9,8 @@
 /home/yathavan/Documents/security_system/MotionDetection.cpp
 iostream
 -
+vector
+-
 MotionDetection.h
 /home/yathavan/Documents/security_system/MotionDetection.h
 
@@ -28,5 +30,7 @@ opencv4/opencv2/core.hpp
 opencv4/opencv2/video.hpp
 -
 opencv4/opencv2/imgproc.hpp
+-
+opencv4/opencv2/highgui.hpp
 -
 
