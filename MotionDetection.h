@@ -33,7 +33,7 @@ namespace yparam
         bool checkDetection(cv::Mat);
         time_t getCaptureTime() const;
         void setBase(cv::Mat);
-        void printDetection(cv::Mat);
+        void printDetection(cv::Mat&);
 
         // friend void operator>>(cv::VideoCapture, MotionDetection);
     };

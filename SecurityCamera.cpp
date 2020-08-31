@@ -16,7 +16,7 @@ namespace yparam
 
     SecurityCamera::SecurityCamera(int incoming_capture_stream, int incoming_duration)
     {
-        this->capture_stream.open(incoming_capture_stream);
+        this->capture_stream.open("input.mp4");
 
         this->capture_height = capture_stream.get(cv::CAP_PROP_FRAME_HEIGHT);
         this->capture_width = capture_stream.get(cv::CAP_PROP_FRAME_WIDTH);
@@ -35,7 +35,7 @@ namespace yparam
     }
 
     void SecurityCamera::setname()
-    {        
+    {
         time_t timer;
         time(&timer);
 
@@ -68,24 +68,23 @@ namespace yparam
 
         // this loop runs until duration elapses
         // just because it runs for 60 seconds doesn't mean that 60 frames will be assigned to the video...
-        for (int index = 0; index < (this->duration_minutes * FPS * 60); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
+        for (int index = 0; index < (15 * 60 * 60); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
         {
             this->capture_stream >> this->frame; // perform operations on this frame
-            
-            if (motionDetector.checkDetection(this->frame))
+
+            if (!this->frame.empty())
             {
-                motionDetector.printDetection(this->frame);
+                motionDetector.checkDetection(this->frame);
+                // if (motionDetector.checkDetection(this->frame))
+                // {
+                //     motionDetector.printDetection(this->frame);
+                // }
             }
 
-            // reset base every 30 seconds
-            diff = std::chrono::steady_clock::now() - now;
-            if (diff.count() > 1)
-            {
-                this->capture_stream >> this->motionDetector; // set the base frame
-                now = std::chrono::steady_clock::now();
-            }            
+            // this->capture_stream >> this->motionDetector; // set the base frame
+            now = std::chrono::steady_clock::now();
 
-            this->video_file.write(this->frame);            
+            this->video_file.write(this->frame);
         }
 
         /*
