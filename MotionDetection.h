@@ -25,6 +25,8 @@ namespace yparam
         std::string catchType{""};
         bool faceDetected{false};        
         cv::Point2f points[4];
+        cv::Size kernel;
+        int avg_light{0};
 
     public:
         MotionDetection();
@@ -32,6 +34,7 @@ namespace yparam
 
         bool checkDetection(cv::Mat);
         time_t getCaptureTime() const;
+        void calc_light(cv::Mat);
         void setBase(cv::Mat);
         void printDetection(cv::Mat&);
 

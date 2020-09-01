@@ -13,6 +13,7 @@ namespace yparam
         this->faceDetected = false;
 
         cv::namedWindow("motion_window", cv::WINDOW_AUTOSIZE);
+        // cv::namedWindow("thresh", cv::WINDOW_AUTOSIZE);
         cv::namedWindow("livefeed", cv::WINDOW_AUTOSIZE);
     }
 
@@ -22,34 +23,28 @@ namespace yparam
 
     bool MotionDetection::checkDetection(cv::Mat incoming_frame)
     {
-        // get average brightness
-
-        long totalValue = 0;
-
-        // calculate total value of all pixels (GRAY)
-        for (int i = 0; i < incoming_frame.rows; i++)
-        {
-            for (int j = 0; j < incoming_frame.cols; j++)
-            {
-                totalValue += incoming_frame.at<uchar>(i, j);
-                // greyImage.at<uchar>(i, j) = (greyImage.at<uchar>(i, j)) * ;
-            }
-        }
-
-        // calculate average light value
-        int averageLightValue = totalValue / incoming_frame.total();
-        std::cout << averageLightValue << std::endl;
+        // this->calc_light(incoming_frame);
 
         cv::Mat motion_frame(incoming_frame.rows, incoming_frame.cols, cv::IMREAD_ANYCOLOR);
+        cv::blur(incoming_frame, incoming_frame, cv::Size(5,5));
+        cv::absdiff(incoming_frame, this->baseFrame, motion_frame); // finding binary differences
 
-        cv::absdiff(incoming_frame, this->baseFrame, motion_frame);
         this->setBase(incoming_frame);
 
-        cv::cvtColor(motion_frame, motion_frame, cv::COLOR_BGR2GRAY);
-        cv::blur(motion_frame, motion_frame, cv::Size(3, 3)); // higher the brightness, lower the blur
-        cv::threshold(motion_frame, motion_frame, ((averageLightValue - 50) < 0 ? 0 : (averageLightValue - 50)), 255, cv::THRESH_BINARY); // doesn't detect it as a blob... more of a cluster of blobs...
+        cv::Mat element = cv::getStructuringElement(cv::MORPH_OPEN, cv::Size(5,5));
+
+        cv::erode(motion_frame, motion_frame, element); // eroding the differential
+        cv::dilate(motion_frame, motion_frame, element);
+
         
-        // cv::Canny(motion_frame, motion_frame, 0, 255); 
+
+        cv::cvtColor(motion_frame, motion_frame, cv::COLOR_BGR2GRAY);
+
+        cv::blur(motion_frame, motion_frame, cv::Size(5,5)); // blurring the differential image // higher the brightness, lower the blur; lower the brightness, higher the blur
+
+        cv::threshold(motion_frame, motion_frame, ((this->avg_light - 70) < 0 ? 0 : (this->avg_light - 70)), 255, cv::THRESH_BINARY); // doesn't detect it as a blob... more of a cluster of blobs...
+
+        // cv::Canny(motion_frame, motion_frame, 0, 255);
         // do we need edge detection? the idea is to get a bigger blob to grab onto, so leaving it at threshold might be beneficial for this scenario
 
         // use kmeans to group each "cluster" as 1 object
@@ -62,7 +57,6 @@ namespace yparam
         114  57   2
 
         */
-
 
         cv::imshow("motion_window", motion_frame);
         cv::waitKey(1);
@@ -80,9 +74,27 @@ namespace yparam
         return this->detectionTime;
     }
 
+    void MotionDetection::calc_light(cv::Mat img)
+    {
+        long totalValue = 0;
+
+        for (int i = 0; i < img.rows; i++)
+        {
+            for (int j = 0; j < img.cols; j++)
+            {
+                totalValue += img.at<uchar>(i, j);
+                // greyImage.at<uchar>(i, j) = (greyImage.at<uchar>(i, j)) * ;
+            }
+        }
+
+        this->avg_light = totalValue / img.total();
+
+        this->kernel = ((this->avg_light < 75) ? cv::Size(5, 5) : cv::Size(3, 3));
+    }
+
     void MotionDetection::setBase(cv::Mat incoming_base)
     {
-        cv::blur(incoming_base, this->baseFrame, cv::Size(5, 5));
+        cv::blur(incoming_base, this->baseFrame, this->kernel);
     }
 
     void MotionDetection::printDetection(cv::Mat &incoming_image)
@@ -104,6 +116,7 @@ namespace yparam
     {
         cv::Mat frame;
         incoming_capture_stream >> frame;
+        incoming_obj.calc_light(frame);
         incoming_obj.setBase(frame);
 
         return incoming_capture_stream;
