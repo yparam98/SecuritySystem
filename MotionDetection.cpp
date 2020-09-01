@@ -38,75 +38,31 @@ namespace yparam
 
         // calculate average light value
         int averageLightValue = totalValue / incoming_frame.total();
-
-        // std::cout << "light: " << averageLightValue << std::endl;
-
-        // check against base frame for disparities
-        // find a way to get a baseline...
+        std::cout << averageLightValue << std::endl;
 
         cv::Mat motion_frame(incoming_frame.rows, incoming_frame.cols, cv::IMREAD_ANYCOLOR);
-
-        // this->captureFrame = incoming_frame;
 
         cv::absdiff(incoming_frame, this->baseFrame, motion_frame);
         this->setBase(incoming_frame);
 
         cv::cvtColor(motion_frame, motion_frame, cv::COLOR_BGR2GRAY);
-        cv::blur(motion_frame, motion_frame, cv::Size(3, 3));
-        cv::threshold(motion_frame, motion_frame, (averageLightValue - 40), (((averageLightValue + 100) > 255) ? 255 : averageLightValue + 100), cv::THRESH_BINARY);
-        // cv::Canny(motion_frame, motion_frame, 0, 255);
+        cv::blur(motion_frame, motion_frame, cv::Size(3, 3)); // higher the brightness, lower the blur
+        cv::threshold(motion_frame, motion_frame, ((averageLightValue - 50) < 0 ? 0 : (averageLightValue - 50)), 255, cv::THRESH_BINARY); // doesn't detect it as a blob... more of a cluster of blobs...
+        
+        // cv::Canny(motion_frame, motion_frame, 0, 255); 
+        // do we need edge detection? the idea is to get a bigger blob to grab onto, so leaving it at threshold might be beneficial for this scenario
 
-        // std::vector<std::vector<cv::Point>> contours;
-        // std::vector<cv::Vec4i> hierarchy;
-        // Standard Hough Line Transform
-        // std::vector<cv::Vec2f> lines;
+        // use kmeans to group each "cluster" as 1 object
+        // then save those points encasing each cluster
 
-        // cv::HoughLines(
-        //     motion_frame,
-        //     lines,
-        //     1,
-        //     CV_PI / 180,
-        //     50,
-        //     50,
-        //     10);
+        /*
+        
+        79   11   7
+        89   17   5
+        114  57   2
 
-        // for (int i = 0; i < lines.size(); i++)
-        // {
-        //     float rho = lines[i][0], theta = lines[i][1];
-        //     cv::Point pt1, pt2;
-        //     double a = cos(theta), b = sin(theta);
-        //     double x0 = a * rho, y0 = b * rho;
-        //     pt1.x = cvRound(x0 + 1000 * (-b));
-        //     pt1.y = cvRound(y0 + 1000 * (a));
-        //     pt2.x = cvRound(x0 - 1000 * (-b));
-        //     pt2.y = cvRound(y0 - 1000 * (a));
-        //     cv::line(incoming_frame, pt1, pt2, cv::Scalar(0, 0, 255), 3, cv::LINE_AA);
-        // }
+        */
 
-        // cv::findContours(
-        //     motion_frame,
-        //     contours,
-        //     hierarchy,
-        //     cv::RETR_TREE,
-        // 	cv::CHAIN_APPROX_SIMPLE
-        // );
-
-        // for (int index = 0; index < contours.size(); index++)
-        // {
-        //     cv::RotatedRect rect = cv::minAreaRect(contours[index]);
-        //     rect.points(this->points);
-        // }
-
-        // for (int i = 0; i < 4; i++)
-        // {
-        //     cv::line(
-        //         incoming_frame,
-        //         this->points[i],
-        //         this->points[(i + 1) % 4],
-        //         cv::Scalar(0, 0, 255),
-        //         2,
-        //         cv::LINE_AA);
-        // }
 
         cv::imshow("motion_window", motion_frame);
         cv::waitKey(1);
@@ -126,7 +82,7 @@ namespace yparam
 
     void MotionDetection::setBase(cv::Mat incoming_base)
     {
-        cv::blur(incoming_base, this->baseFrame, cv::Size(3, 3));
+        cv::blur(incoming_base, this->baseFrame, cv::Size(5, 5));
     }
 
     void MotionDetection::printDetection(cv::Mat &incoming_image)

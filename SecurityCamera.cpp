@@ -16,7 +16,8 @@ namespace yparam
 
     SecurityCamera::SecurityCamera(int incoming_capture_stream, int incoming_duration)
     {
-        this->capture_stream.open("input.mp4");
+        this->capture_stream.open("parking_lot.mp4");
+        // this->capture_stream.open(incoming_capture_stream);
 
         this->capture_height = capture_stream.get(cv::CAP_PROP_FRAME_HEIGHT);
         this->capture_width = capture_stream.get(cv::CAP_PROP_FRAME_WIDTH);
@@ -68,7 +69,8 @@ namespace yparam
 
         // this loop runs until duration elapses
         // just because it runs for 60 seconds doesn't mean that 60 frames will be assigned to the video...
-        for (int index = 0; index < (15 * 60 * 60); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
+        // for (int index = 0; index < (this->duration_minutes * 60 * FPS); index++) // minutes x seconds x frames = 1 x 60 x 60 = 3600 frames = 1 minute of video
+        for (int index = 0; index < (30 * 1 * 30); index++)
         {
             this->capture_stream >> this->frame; // perform operations on this frame
 

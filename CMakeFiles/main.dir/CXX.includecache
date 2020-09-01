@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+/home/yathavan/Documents/security_system/MotionDetection.cpp
+iostream
+-
+vector
+-
+MotionDetection.h
+/home/yathavan/Documents/security_system/MotionDetection.h
+
 /home/yathavan/Documents/security_system/MotionDetection.h
 iostream
 -
