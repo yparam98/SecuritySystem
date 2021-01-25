@@ -15,33 +15,33 @@
 
 namespace yparam
 {
-    const int FPS{60};
+	const int FPS{60};
 
-    class SecurityCamera
-    {
-    private:
-        cv::VideoCapture capture_stream;
-        cv::VideoWriter video_file;
-        cv::Mat frame;
+	class SecurityCamera
+	{
+		private:
+			cv::VideoCapture capture_stream;
+			cv::VideoWriter video_file;
+			cv::Mat frame;
 
-        MotionDetection motionDetector;
+			MotionDetection motionDetector;
 
-        std::string file_name{""};
+			std::string file_name{""};
 
-        int capture_width{0};
-        int capture_height{0};
+			int capture_width{0};
+			int capture_height{0};
 
-        int duration_minutes{0};
+			int duration_minutes{0};
 
-        void setname();
+			void setname();
 
-    public:
-        SecurityCamera();
-        SecurityCamera(int, int = 60); // capture stream, duration
-        ~SecurityCamera();
+		public:
+			SecurityCamera();
+			SecurityCamera(int, int = 60); // capture stream, duration
+			~SecurityCamera();
 
-        void run();
-    };
+			void run();
+	};
 } // namespace yparam
 
 #endif // YPARAM_SECURITYCAMERA_H

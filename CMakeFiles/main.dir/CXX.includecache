@@ -33,6 +33,8 @@ opencv4/opencv2/imgproc.hpp
 -
 opencv4/opencv2/highgui.hpp
 -
+opencv4/opencv2/features2d.hpp
+-
 
 /home/yathavan/Documents/security_system/SecurityCamera.cpp
 SecurityCamera.h
